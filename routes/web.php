@@ -1,0 +1,97 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+// ======= FRONTEND ======= \\
+
+Route::get('/','Frontend\IndexController@index');
+
+    ///// MENU \\\\\
+        //// PROFILE SEKOLAJ \\\\
+        Route::get('profile-nastra',[App\Http\Controllers\Frontend\IndexController::class,'profileNastra'])->name('profile.nastra');
+
+        //// VISI dan MISI
+        Route::get('visi-dan-misi',[App\Http\Controllers\Frontend\IndexController::class,'visimisi'])->name('visimisi.nastra');
+
+        //// PROGRAM STUDI \\\\
+        Route::get('program/{slug}', [App\Http\Controllers\Frontend\MenuController::class, 'programStudi']);
+        //// PROGRAM STUDI \\\\
+        Route::get('kegiatan/{slug}', [App\Http\Controllers\Frontend\MenuController::class, 'kegiatan']);
+
+        /// ARTIKEL \\\
+        Route::get('artikel',[App\Http\Controllers\Frontend\IndexController::class,'artikel'])->name('artikel');
+        Route::get('artikel/{slug}',[App\Http\Controllers\Frontend\IndexController::class,'detailArtikel'])->name('detail.artikel');
+
+        /// EVENT \\\
+        Route::get('event/{slug}',[App\Http\Controllers\Frontend\IndexController::class,'detailEvent'])->name('detail.event');
+        Route::get('event',[App\Http\Controllers\Frontend\IndexController::class,'events'])->name('event');
+
+Auth::routes(['register' => false]);
+
+
+// ======= BACKEND ======= \\
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    /// PROFILE SETTINGS \\\
+    Route::resource('profile-settings',Backend\ProfileController::class);
+    /// CHANGE PASSWORD
+    Route::put('profile-settings/change-password/{id}',[App\Http\Controllers\Backend\ProfileController::class, 'changePassword'])->name('profile.change-password');
+
+    Route::prefix('/')->middleware('role:Admin')->group( function (){
+        ///// WEBSITE \\\\\
+        Route::resources([
+            /// PROFILE SEKOLAH \\
+            'backend-profile-sekolah'   => Backend\Website\ProfilSekolahController::class,
+            /// VISI & MISI \\\
+            'backend-visimisi'  => Backend\Website\VisidanMisiController::class,
+            //// PROGRAM STUDI \\\\
+            'program-studi' =>  Backend\Website\ProgramController::class,
+            /// KEGIATAN \\\
+            'backend-kegiatan' => Backend\Website\KegiatanController::class,
+            /// IMAGE SLIDER \\\
+            'backend-imageslider' => Backend\Website\ImageSliderController::class,
+            /// ABOUT \\\
+            'backend-about' => Backend\Website\AboutController::class,
+            /// VIDEO \\\
+            'backend-video' => Backend\Website\VideoController::class,
+            /// KATEGORI ARTIKEL \\\
+            'backend-kategori-berita'   => Backend\Website\KategoriBeritaController::class,
+            /// BERITA \\\
+            'backend-berita' => Backend\Website\BeritaController::class,
+            /// EVENT \\\
+            'backend-event' => Backend\Website\EventsController::class,
+            /// FOOTER \\\
+            'backend-footer'    => Backend\Website\FooterController::class,
+        ]);
+
+        ///// PENGGUNA \\\\\
+        Route::resources([
+            /// PENGAJAR \\\
+            'backend-pengguna-pengajar' => Backend\Pengguna\PengajarController::class,
+            /// STAF \\\
+            'backend-pengguna-staf' => Backend\Pengguna\StafController::class,
+            /// MURID \\\
+            'backend-pengguna-murid' => Backend\Pengguna\MuridController::class,
+            /// PPDB \\\
+            'backend-pengguna-ppdb' => Backend\Pengguna\PPDBController::class
+        ]);
+        ///// PENGGUNA \\\\\
+        Route::resources([
+            /// PENGAJAR \\\
+            'backend-master-angkatan' => Backend\Master\AngkatanController::class,
+
+        ]);
+    });
+});
