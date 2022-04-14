@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/u1021663/public_html/
+    - export DEPLOYPATH=/home/u1021663/public_html/nastra
     - /bin/cp -R app $DEPLOYPATH
     - /bin/cp -R bootstrap $DEPLOYPATH
     - /bin/cp -R config $DEPLOYPATH
@@ -11,10 +11,10 @@ deployment:
     - /bin/cp -R routes $DEPLOYPATH
     - /bin/cp -R storage $DEPLOYPATH
     - /bin/cp -R tests $DEPLOYPATH
-    - /bin/cp server.php $DEPLOYPATH
     - /bin/cp index.php $DEPLOYPATH
     - /bin/cp .env $DEPLOYPATH
     - /bin/cp artisan.php $DEPLOYPATH
+    - /bin/cp phpunit.xml $DEPLOYPATH
     - /bin/cp .editorconfig $DEPLOYPATH
     - /bin/cp composer.json $DEPLOYPATH
     - /bin/cp composer.lock $DEPLOYPATH
